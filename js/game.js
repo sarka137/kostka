@@ -5,7 +5,7 @@ const canvas = document.getElementById("myCanvas");
 let hod = 6;
 let hody = [];
 let timer = false;
- 
+
 
 
 let ctx = canvas.getContext("2d");
@@ -24,6 +24,8 @@ tlacitko.addEventListener('click',
         if(!timer) {
             timer = setInterval(animace, 50);
             tlacitko.innerText = 'Stop';
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }else {
             clearInterval(timer);
             timer = false;
@@ -49,11 +51,18 @@ function drawTarget(circles, gap){
     }else {
         col = "red";
     }
-    
+
     for (i=1; i<=circles; i++){
       drawCircle(canvas.width/2, canvas.height/2, i*gap, col);
       
     }
+  }
+
+  function drawCircle(x, y, r, col) {
+    ctx.strokeStyle = col;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2 * Math.PI);
+    ctx.stroke();
   }
 
 
