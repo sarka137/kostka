@@ -1,69 +1,47 @@
 const tlacitko = document.getElementById('game');
 const kostka = document.getElementById('cube');
+const kostka2 = document.getElementById('cube2');
+const kostka3 = document.getElementById('cube3');
 const vysledek = document.getElementById('result');
 const canvas = document.getElementById("myCanvas");
 let hod = 6;
+let hod2 = 6;
+let hod3 = 6;
 let hody = [];
+let soucetHod = [];
 let timer = false;
-
-
-
-let ctx = canvas.getContext("2d");
-
-
-
 
 function animace() {
     hod = Math.ceil(Math.random() * 6);
+    hod2 = Math.ceil(Math.random() * 6);
+    hod3 = Math.ceil(Math.random() * 6);
     
     kostka.src='img/kostka' + hod + '.png';
+    kostka2.src='img/ckostka' + hod2 + '.png';
+    kostka3.src='img/zkostka' + hod3 + '.png';
 }
+
+
 
 tlacitko.addEventListener('click',
     function(){
         if(!timer) {
             timer = setInterval(animace, 50);
             tlacitko.innerText = 'Stop';
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
         }else {
             clearInterval(timer);
             timer = false;
             tlacitko.innerText = 'Hraj';
-            hody.push(hod);
+            hody.push(hod, hod2, hod3);
+            soucetHod.push(hod + hod2 + hod3);
             console.log(hody);
+            console.log(soucetHod);
             statistika();
-            drawTarget(hod, 10);
-        }
-        
-        
+            
+        }                
     }
 );
-
-function plocha() {
-   
-}
-
-function drawTarget(circles, gap){
-    let col;
-    if (circles % 2){
-        col = "blue";
-    }else {
-        col = "red";
-    }
-
-    for (i=1; i<=circles; i++){
-      drawCircle(canvas.width/2, canvas.height/2, i*gap, col);
-      
-    }
-  }
-
-  function drawCircle(x, y, r, col) {
-    ctx.strokeStyle = col;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.stroke();
-  }
 
 
 function suma(cisla) {
@@ -76,15 +54,15 @@ function suma(cisla) {
 
 function maximum(cisla) {
     let max = 1;
-    cisla.forEach(function(value,index){
+    cisla.forEach(function(value){
         if (value > max) max = value;
     })
     return max;
 }
 
 function minimum(cisla) {
-    let min = 6;
-    cisla.forEach(function(value,index){
+    let min = 18;
+    cisla.forEach(function(value){
         if (value < min) min = value;
     })
     return min;
@@ -96,11 +74,12 @@ function average(sum, count) {
 
 function statistika() {
       
-    vysledek.innerHTML = `<p>Hod:   ${hod}  </p>`;
-    vysledek.innerHTML += `<p>Počet hodů: ${hody.length}  </p>`;
-    vysledek.innerHTML += `<p>Součet hodů: ${suma(hody)}  </p>`;
+    vysledek.innerHTML = `<p>Hod:  | ${hod} | ${hod2} | ${hod3} |</p>`;
+    vysledek.innerHTML += `<p>Součet hodů: ${hod + hod2 + hod3}  </p>`;
+    vysledek.innerHTML += `<p>Počet hodů: ${(hody.length)/3}  </p>`;
+    vysledek.innerHTML += `<p>Součet všech hodů: ${suma(hody)}  </p>`;
     vysledek.innerHTML += `<p>Průměr hodů: ${average(suma(hody),hody.length)}  </p>`;
-    vysledek.innerHTML += `<p>Nejvyšší hod: ${maximum(hody)}  </p>`;
-    vysledek.innerHTML += `<p>Nejnižší hod: ${minimum(hody)}  </p>`;
+    vysledek.innerHTML += `<p>Nejvyšší součet hodů: ${maximum(soucetHod)}  </p>`;
+    vysledek.innerHTML += `<p>Nejnižší součet hodů: ${minimum(soucetHod)}  </p>`;
     
 }
